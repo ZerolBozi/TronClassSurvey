@@ -1,0 +1,4 @@
+requests
+ddddocr
+# if you need it
+# schedule==1.2.2
