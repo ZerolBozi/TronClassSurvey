@@ -19,7 +19,7 @@ class TronClassSurvey:
         self.token = ""
         self.user_id = ""
         self.base_url = "https://qsurvey.nfu.edu.tw/survey-api/api"
-        self.api_url = f"https://qsurvey.nfu.edu.tw/survey-service/api/v1"
+        self.api_url = "https://qsurvey.nfu.edu.tw/survey-service/api/v1"
         self.headers = {
             "Content-Type": "application/json;charset=UTF-8"
         }
@@ -141,7 +141,7 @@ class TronClassSurvey:
     def get_user_surveys(self) -> Dict[str, dict]:
         try:
             survey_datas = self.__get_surveys()
-
+            
             activate_surveys = {}
             for data in survey_datas:
                 if data['response'] is None:
@@ -245,24 +245,16 @@ class TronClassSurvey:
                 main_answers.append(answer)
                 continue
 
-            elif question_type == "single_selection":
-                question_title = question_heading['text']['default']
-                if question_title in study_answers:
-                    target_text = study_answers[question_title]["hard" if use_hard_answers else "default"]
-                    choice_id = self.__get_choice_id_by_text(question_choices, target_text, 'zh_tw')
-                    if choice_id:
-                        answer['answer'].append(choice_id)
-                main_answers.append(answer)
-                continue
-
-            elif question_type == "multi_selection":
+            elif (question_type == "single_selection") or (question_type == "multi_selection"):
                 question_title = question_heading['text']['default']
                 if question_title in study_answers:
                     targets = study_answers[question_title]["hard" if use_hard_answers else "default"]
+                    targets = targets if isinstance(targets, list) else [targets]
                     for target_text in targets:
                         choice_id = self.__get_choice_id_by_text(question_choices, target_text, 'zh_tw')
                         if choice_id:
                             answer['answer'].append(choice_id)
+                            
                 main_answers.append(answer)
                 continue
 
