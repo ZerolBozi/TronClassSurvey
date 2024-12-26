@@ -34,7 +34,7 @@ class TronClassSurvey:
         captcha = ocr.classification(image_data_base64)
         return captcha
     
-    def __get_cas_url(self, session: requests.Session)-> str:
+    def __get_cas_url(self, session: requests.Session) -> str:
         cas_response = session.get(f"{self.base_url}/cas")
         if cas_response.status_code == 200:
             cas_url = cas_response.json()
